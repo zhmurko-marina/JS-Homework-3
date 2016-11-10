@@ -17,21 +17,38 @@ Array.prototype.myMap = function (func) {
 };
 
 Array.prototype.mySort = function (func) {
-    var tmp;
-    for (var i = 0; i < this.length; i++) {
-        for (var j = 0; j < this.length - 1 - i; j++) {
-            this[j] += '';
-            this[j + 1] += '';
-            if (this[j] > this[j + 1]) {
-                tmp = this[j + 1];
-                this[j + 1] = this[j];
-                this[j] = tmp;
+    if (func == undefined) {
+        var tmp = '';
+        for (var i = 0; i < this.length; i++) {
+            for (var j = 0; j < this.length - 1 - i; j++) {
+                this[j] += '';
+                this[j + 1] += '';
+                if (this[j] > this[j + 1]) {
+                    tmp = this[j + 1];
+                    this[j + 1] = this[j];
+                    this[j] = tmp;
+                }
+            }
+        }
+        for (i = 0; i < this.length; i++) {
+            if (typeof (this[i] - 1) == "number" && !(isNaN(this[i])) && this[i] != '') {
+                this[i] = this[i] - 1 + 1;
+            }
+        }
+    }
+    else {
+        for (i = 0; i < this.length; i++) {
+            for (j = 0; j < this.length - 1 - i; j++) {
+                if (func(this[j], this[j + 1]) > 0) {
+                    tmp = this[j + 1];
+                    this[j + 1] = this[j];
+                    this[j] = tmp;
+                }
             }
         }
     }
     return this;
 };
-
 
 /* Test for myForEach*/
 
@@ -42,7 +59,6 @@ function logArrayElements(element, index, array) {
 var arr = [2, undefined, 5, 9];
 console.log('MyForEach: ');
 arr.myForEach(logArrayElements);
-console.log(arr);
 console.log('forEach: ');
 arr.forEach(logArrayElements);
 
@@ -58,7 +74,6 @@ var doubles2 = numbers.map(double);
 console.log('myMap: ' + doubles + '\n');
 console.log('  map: ' + doubles2 + '\n');
 
-
 /* Test for mySort */
 
 /*
@@ -67,5 +82,15 @@ console.log('  map: ' + doubles2 + '\n');
  ['слово', 'Слово', '1 Слово', '2 Слова']
  */
 
-var scores = ['filter', '', 'абрикос', 'GURU', 'Tree', 'Яблоко'];
-console.log(scores.mySort());
+var scores = [1, 6, 10, 200, 0];
+
+function compareNumbers(a, b) {
+    //return b - a;
+    return a - b;
+}
+console.log('mySort: ' + ['filter', '', 'абрикос', 'GURU', 'Tree', 'Яблоко'].mySort() + '\n');
+console.log('  sort: ' + ['filter', '', 'абрикос', 'GURU', 'Tree', 'Яблоко'].sort() +'\n');
+console.log('mySort: ' + [1, 6, 10, 200, 0].mySort() + '\n');
+console.log('  sort: ' + [1, 6, 10, 200, 0].sort() +'\n');
+console.log('mySort with function: ' + [1, 6, 10, 200, 0].mySort(compareNumbers) + '\n');
+console.log('  sort with function: ' + [1, 6, 10, 200, 0].sort(compareNumbers) +'\n');
